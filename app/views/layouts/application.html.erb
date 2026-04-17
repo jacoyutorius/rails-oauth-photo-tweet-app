@@ -23,8 +23,12 @@
   </head>
 
   <body>
-    <% flash.each do |type, message| %>
-      <div class="flash flash-<%= type %>"><%= message %></div>
+    <% if flash.any? %>
+      <ul>
+        <% flash.each do |_type, message| %>
+          <li style="color: red;"><%= message %></li>
+        <% end %>
+      </ul>
     <% end %>
 
     <%= yield %>
