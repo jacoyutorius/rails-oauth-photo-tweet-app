@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "Photos", type: :request do
+  let(:image_file) do
+    Rack::Test::UploadedFile.new(
+      Rails.root.join("spec/fixtures/files/test-image.svg"),
+      "image/svg+xml"
+    )
+  end
+
   describe "GET /photos" do
     it "未ログイン時はログイン画面にリダイレクトする" do
       get photos_path
@@ -29,6 +36,74 @@ RSpec.describe "Photos", type: :request do
       expect(response.body).to include(older_photo.title)
       expect(response.body).not_to include("other")
       expect(response.body.index(newer_photo.title)).to be < response.body.index(older_photo.title)
+    end
+  end
+
+  describe "GET /photos/new" do
+    it "未ログイン時はログイン画面にリダイレクトする" do
+      get new_photo_path
+
+      expect(response).to have_http_status(:found)
+      expect(response).to redirect_to(new_session_path)
+    end
+
+    it "ログイン中はアップロード画面を表示する" do
+      user = create(:user)
+
+      post session_path, params: {
+        email: user.email,
+        password: "password"
+      }
+
+      get new_photo_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("写真アップロード")
+    end
+  end
+
+  describe "POST /photos" do
+    it "有効な入力で写真を登録できる" do
+      user = create(:user)
+
+      post session_path, params: {
+        email: user.email,
+        password: "password"
+      }
+
+      expect do
+        post photos_path, params: {
+          photo: {
+            title: "sample photo",
+            image: image_file
+          }
+        }
+      end.to change(user.photos, :count).by(1)
+
+      expect(response).to have_http_status(:found)
+      expect(response).to redirect_to(photos_path)
+      expect(Photo.last.image).to be_attached
+    end
+
+    it "無効な入力では写真を登録できない" do
+      user = create(:user)
+
+      post session_path, params: {
+        email: user.email,
+        password: "password"
+      }
+
+      expect do
+        post photos_path, params: {
+          photo: {
+            title: "",
+            image: nil
+          }
+        }
+      end.not_to change(Photo, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include("写真アップロード")
     end
   end
 end

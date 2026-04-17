@@ -1,11 +1,16 @@
 <h1>写真一覧</h1>
 
+<p><%= link_to "写真をアップロード", new_photo_path %></p>
+
 <% if @photos.any? %>
   <ul>
     <% @photos.each do |photo| %>
       <li>
         <strong><%= photo.title %></strong>
         <span><%= l(photo.created_at, format: :short) %></span>
+        <% if photo.image.attached? %>
+          <div><%= image_tag photo.image, width: 200 %></div>
+        <% end %>
       </li>
     <% end %>
   </ul>

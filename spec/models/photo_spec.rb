@@ -5,6 +5,13 @@ RSpec.describe Photo, type: :model do
     expect(build(:photo)).to be_valid
   end
 
+  it "is invalid without an image" do
+    photo = build(:photo)
+    photo.image.detach
+
+    expect(photo).not_to be_valid
+  end
+
   it "is invalid without a title" do
     expect(build(:photo, title: "")).not_to be_valid
   end

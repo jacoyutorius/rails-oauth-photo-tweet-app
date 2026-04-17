@@ -1,0 +1,26 @@
+<h1>写真アップロード</h1>
+
+<%= form_with model: @photo do |form| %>
+  <% if @photo.errors.any? %>
+    <ul>
+      <% @photo.errors.full_messages.each do |message| %>
+        <li style="color: red;"><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div>
+    <%= form.label :title, "タイトル" %>
+    <%= form.text_field :title %>
+    <p>30文字以内で入力してください。</p>
+  </div>
+
+  <div>
+    <%= form.label :image, "画像" %>
+    <%= form.file_field :image, accept: "image/*" %>
+  </div>
+
+  <div>
+    <%= form.submit "登録" %>
+  </div>
+<% end %>
