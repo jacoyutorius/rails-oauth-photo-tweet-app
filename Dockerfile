@@ -9,6 +9,7 @@
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=4.0.0
 ARG RAILS_ENV=production
+ARG BUNDLE_DEPLOYMENT=1
 ARG BUNDLE_WITHOUT=development
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
@@ -17,13 +18,13 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
+    apt-get install --no-install-recommends -y build-essential curl libjemalloc2 libvips sqlite3 && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment variables and enable jemalloc for reduced memory usage and latency.
 ENV RAILS_ENV="${RAILS_ENV}" \
-    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_DEPLOYMENT="${BUNDLE_DEPLOYMENT}" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="${BUNDLE_WITHOUT}" \
     LD_PRELOAD="/usr/local/lib/libjemalloc.so"
