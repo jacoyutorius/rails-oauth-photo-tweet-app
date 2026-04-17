@@ -65,6 +65,15 @@ RSpec.configure do |config|
   # To enable this behaviour uncomment the line below.
   # config.infer_spec_type_from_file_location!
 
+  # request spec では InvalidAuthenticityToken が発生するため、ここで CSRF 保護を無効化する。
+  config.around(:each, type: :request) do |example|
+    original = ActionController::Base.allow_forgery_protection
+    ActionController::Base.allow_forgery_protection = false
+    example.run
+  ensure
+    ActionController::Base.allow_forgery_protection = original
+  end
+
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
