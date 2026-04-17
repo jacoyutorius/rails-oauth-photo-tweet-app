@@ -9,6 +9,6 @@ class Photo < ApplicationRecord
   private
 
   def image_must_be_attached
-    errors.add(:image, "を入力してください") unless image.attached?
+    errors.add(:image, :blank) unless image.attached?
   end
 end

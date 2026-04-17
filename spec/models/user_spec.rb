@@ -26,7 +26,7 @@ RSpec.describe User, type: :model do
       )
 
       expect(user).not_to be_valid
-      expect(user.errors[:email]).to include("has already been taken")
+      expect(user.errors[:email]).to include("はすでに使用されています")
     end
 
     it "requires a password on create" do

@@ -111,8 +111,8 @@ RSpec.describe "Photos", type: :request do
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("写真アップロード")
-      expect(response.body).to include("Title")
-      expect(response.body).to include("Image")
+      expect(response.body).to include("タイトルを入力してください")
+      expect(response.body).to include("画像ファイルを入力してください")
     end
 
     it "タイトルが31文字以上だと登録できない" do
@@ -133,7 +133,7 @@ RSpec.describe "Photos", type: :request do
       end.not_to change(Photo, :count)
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(response.body).to include("Title")
+      expect(response.body).to include("タイトルは30文字以内で入力してください")
     end
   end
 end
