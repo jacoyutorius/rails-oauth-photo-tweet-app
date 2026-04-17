@@ -1,28 +1,28 @@
 require "rails_helper"
+require "securerandom"
 
 RSpec.describe User, type: :model do
   describe "validations" do
     it "normalizes email before validation" do
+      email = "user-#{SecureRandom.hex(4)}@example.com"
+
       user = described_class.create!(
-        email: "  TEST@Example.COM  ",
+        email: "  #{email.upcase}  ",
         password: "password",
         password_confirmation: "password"
       )
 
-      expect(user.email).to eq("test@example.com")
+      expect(user.email).to eq(email)
     end
 
     it "does not allow duplicate emails case-insensitively" do
-      described_class.create!(
-        email: "test@example.com",
-        password: "password",
-        password_confirmation: "password"
-      )
+      email = "user-#{SecureRandom.hex(4)}@example.com"
 
-      user = described_class.new(
-        email: "TEST@example.com",
-        password: "password",
-        password_confirmation: "password"
+      create(:user, email: email)
+
+      user = build(
+        :user,
+        email: email.upcase,
       )
 
       expect(user).not_to be_valid
@@ -30,7 +30,7 @@ RSpec.describe User, type: :model do
     end
 
     it "requires a password on create" do
-      user = described_class.new(email: "test@example.com")
+      user = build(:user, password: nil, password_confirmation: nil)
 
       expect(user).not_to be_valid
       expect(user.errors[:password]).to be_present
