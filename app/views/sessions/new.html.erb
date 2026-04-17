@@ -1,0 +1,21 @@
+<% content_for :title, "Login" %>
+
+<section class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-title">ログイン</h1>
+
+    <%= form_with url: session_path, class: "auth-form" do |form| %>
+      <div class="field">
+        <%= form.label :email, "メールアドレス" %>
+        <%= form.email_field :email, autofocus: true, required: true, value: params[:email] %>
+      </div>
+
+      <div class="field">
+        <%= form.label :password, "パスワード" %>
+        <%= form.password_field :password, required: true %>
+      </div>
+
+      <%= form.submit "ログイン", class: "auth-submit" %>
+    <% end %>
+  </div>
+</section>
