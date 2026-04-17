@@ -25,8 +25,9 @@
   <body>
     <% if flash.any? %>
       <ul>
-        <% flash.each do |_type, message| %>
-          <li style="color: red;"><%= message %></li>
+        <% flash.each do |type, message| %>
+          <% color = type.to_sym == :alert ? "red" : "green" %>
+          <li style="color: <%= color %>;"><%= message %></li>
         <% end %>
       </ul>
     <% end %>
