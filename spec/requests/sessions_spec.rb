@@ -44,4 +44,20 @@ RSpec.describe "Sessions", type: :request do
       expect(response.body).to include("メールアドレスまたはパスワードが正しくありません。")
     end
   end
+
+  describe "DELETE /session" do
+    it "ログアウトできる" do
+      user = create(:user)
+      post session_path, params: {
+        email: user.email,
+        password: "password"
+      }
+
+      delete session_path
+
+      expect(response).to have_http_status(:found)
+      expect(response).to redirect_to(new_session_path)
+      expect(session[:user_id]).to be_nil
+    end
+  end
 end

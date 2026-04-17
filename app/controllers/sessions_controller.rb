@@ -13,4 +13,9 @@ class SessionsController < ApplicationController
       render :new, status: :unprocessable_content
     end
   end
+
+  def destroy
+    session.delete(:user_id)
+    redirect_to new_session_path, notice: "ログアウトしました。"
+  end
 end

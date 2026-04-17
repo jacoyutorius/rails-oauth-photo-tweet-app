@@ -32,6 +32,11 @@
       </ul>
     <% end %>
 
+    <%# ログイン中のときはログアウトボタンを表示する %>
+    <% if current_user %>
+      <p><%= button_to "ログアウト", session_path, method: :delete %></p>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
