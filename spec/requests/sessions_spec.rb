@@ -1,10 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "Sessions", type: :request do
-  before do
-    host! "localhost"
-  end
-
   describe "GET /" do
     it "ログイン画面を表示する" do
       get root_path

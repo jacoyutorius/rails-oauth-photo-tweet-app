@@ -2,10 +2,6 @@ require "rails_helper"
 require "securerandom"
 
 RSpec.describe "Users", type: :request do
-  before do
-    host! "localhost"
-  end
-
   describe "GET /users/new" do
     it "returns success" do
       get new_user_path
