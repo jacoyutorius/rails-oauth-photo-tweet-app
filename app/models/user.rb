@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   before_validation :normalize_email
 
+  has_many :photos, dependent: :destroy
+
   has_secure_password
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }

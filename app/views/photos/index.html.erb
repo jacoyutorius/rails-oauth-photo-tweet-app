@@ -1,0 +1,14 @@
+<h1>写真一覧</h1>
+
+<% if @photos.any? %>
+  <ul>
+    <% @photos.each do |photo| %>
+      <li>
+        <strong><%= photo.title %></strong>
+        <span><%= l(photo.created_at, format: :short) %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>写真はまだありません。</p>
+<% end %>

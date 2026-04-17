@@ -2,8 +2,17 @@ require "rails_helper"
 
 RSpec.describe "Sessions", type: :request do
   describe "GET /" do
-    it "ログイン画面を表示する" do
+    it "未ログイン時はログイン画面にリダイレクトする" do
       get root_path
+
+      expect(response).to have_http_status(:found)
+      expect(response).to redirect_to(new_session_path)
+    end
+  end
+
+  describe "GET /session/new" do
+    it "ログイン画面を表示する" do
+      get new_session_path
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("ログイン")
@@ -20,7 +29,7 @@ RSpec.describe "Sessions", type: :request do
       }
 
       expect(response).to have_http_status(:found)
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(photos_path)
       expect(session[:user_id]).to eq(user.id)
     end
 
