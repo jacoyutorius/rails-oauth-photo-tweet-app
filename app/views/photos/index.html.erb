@@ -13,6 +13,9 @@
         <% if photo.image.attached? %>
           <div><%= image_tag photo.image, width: 200 %></div>
         <% end %>
+        <% if access_token.present? %>
+          <div><%= button_to "ツイートする", "#", disabled: true %></div>
+        <% end %>
       </li>
     <% end %>
   </ul>

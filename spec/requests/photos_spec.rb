@@ -19,6 +19,7 @@ RSpec.describe "Photos", type: :request do
     it "ログイン中のユーザーの写真を新しい順で表示する" do
       user = create(:user)
       other_user = create(:user)
+
       older_photo = create(:photo, user: user, title: "older", created_at: 2.days.ago)
       newer_photo = create(:photo, user: user, title: "newer", created_at: 1.day.ago)
       create(:photo, user: other_user, title: "other")
@@ -56,6 +57,32 @@ RSpec.describe "Photos", type: :request do
       expect(response.body.index(newer_photo.title)).to be < response.body.index(older_photo.title)
     end
 
+    it "アクセストークンがある場合はツイートボタンを表示する" do
+      user = create(:user)
+      create(:photo, user: user, title: "photo")
+
+      allow_any_instance_of(ApplicationController).to receive(:access_token).and_return("access-token")
+
+      sign_in_as(user)
+
+      get photos_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("ツイートする")
+    end
+
+    it "アクセストークンがない場合はツイートボタンを表示しない" do
+      user = create(:user)
+      create(:photo, user: user, title: "photo")
+
+      sign_in_as(user)
+
+      get photos_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include("ツイートする")
+    end
+
     it "OAuth設定がない場合は認可リンクを表示しない" do
       user = create(:user)
 
@@ -82,7 +109,6 @@ RSpec.describe "Photos", type: :request do
 
     it "ログイン中はアップロード画面を表示する" do
       user = create(:user)
-
       sign_in_as(user)
 
       get new_photo_path
@@ -97,7 +123,6 @@ RSpec.describe "Photos", type: :request do
   describe "POST /photos" do
     it "有効な入力で写真を登録できる" do
       user = create(:user)
-
       sign_in_as(user)
 
       expect do
@@ -119,7 +144,6 @@ RSpec.describe "Photos", type: :request do
 
     it "無効な入力では写真を登録できない" do
       user = create(:user)
-
       sign_in_as(user)
 
       expect do
@@ -139,7 +163,6 @@ RSpec.describe "Photos", type: :request do
 
     it "タイトルが31文字以上だと登録できない" do
       user = create(:user)
-
       sign_in_as(user)
 
       expect do

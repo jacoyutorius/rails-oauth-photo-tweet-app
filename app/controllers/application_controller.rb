@@ -5,12 +5,16 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
-  helper_method :current_user, :oauth_authorize_url
+  helper_method :current_user, :oauth_authorize_url, :access_token
 
   private
 
   def current_user
     @current_user ||= User.find_by(id: session[:user_id])
+  end
+
+  def access_token
+    session[:access_token]
   end
 
   def oauth_authorize_url
