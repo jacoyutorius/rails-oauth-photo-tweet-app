@@ -59,4 +59,8 @@ class ApplicationController < ActionController::Base
   def oauth_token_url
     ENV.fetch("OAUTH_TOKEN_URL")
   end
+
+  def tweet_api_url
+    ENV.fetch("TWEET_API_URL")
+  end
 end

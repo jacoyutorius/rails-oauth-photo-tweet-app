@@ -21,6 +21,7 @@ export OAUTH_AUTHORIZE_URL=#{提供された認証URL}
 export OAUTH_REDIRECT_URI=http://localhost:3000/oauth/callback
 export OAUTH_SCOPE=#{提供されたスコープ}
 export OAUTH_TOKEN_URL=#{提供されたOAuthトークン取得URL}
+export TWEET_API_URL=http://unifa-recruit-my-tweet-app.ap-northeast-1.elasticbeanstalk.com/api/tweets
 ```
 
 ```bash
