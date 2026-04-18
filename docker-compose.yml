@@ -11,6 +11,11 @@ services:
       RAILS_ENV: development
       BUNDLE_DEPLOYMENT: ""
       BUNDLE_WITHOUT: ""
+      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID:-}
+      OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET:-}
+      OAUTH_AUTHORIZE_URL: ${OAUTH_AUTHORIZE_URL:-}
+      OAUTH_REDIRECT_URI: ${OAUTH_REDIRECT_URI:-http://localhost:3000/oauth/callback}
+      OAUTH_SCOPE: ${OAUTH_SCOPE:-}
     ports:
       - "3000:3000"
     stdin_open: true
