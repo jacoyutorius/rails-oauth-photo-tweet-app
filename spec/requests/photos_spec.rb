@@ -24,6 +24,23 @@ RSpec.describe "Photos", type: :request do
       newer_photo = create(:photo, user: user, title: "newer", created_at: 1.day.ago)
       create(:photo, user: other_user, title: "other")
 
+      sign_in_as(user)
+
+      get photos_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("写真一覧")
+      expect(response.body).to include("ログアウト")
+      expect(response.body).to include(newer_photo.title)
+      expect(response.body).to include(older_photo.title)
+      expect(response.body).not_to include("other")
+      expect(response.body.index(newer_photo.title)).to be < response.body.index(older_photo.title)
+    end
+
+    it "OAuth設定がある場合はMyTweetApp連携リンクを表示すること" do
+      user = create(:user)
+      create(:photo, user: user, title: "photo")
+
       allow(ENV).to receive(:fetch).and_call_original
       allow(ENV).to receive(:fetch)
         .with("OAUTH_CLIENT_ID")
@@ -43,18 +60,12 @@ RSpec.describe "Photos", type: :request do
       get photos_path
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("写真一覧")
-      expect(response.body).to include("ログアウト")
       expect(response.body).to include("MyTweetAppと連携")
       expect(response.body).to include("https://example.com/oauth/authorize")
       expect(response.body).to include("client_id=test-client-id")
       expect(response.body).to include("redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Foauth%2Fcallback")
       expect(response.body).to include("response_type=code")
       expect(response.body).to include("scope=write_tweet")
-      expect(response.body).to include(newer_photo.title)
-      expect(response.body).to include(older_photo.title)
-      expect(response.body).not_to include("other")
-      expect(response.body.index(newer_photo.title)).to be < response.body.index(older_photo.title)
     end
 
     it "アクセストークンがある場合はツイートボタンを表示すること" do
