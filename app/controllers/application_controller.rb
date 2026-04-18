@@ -47,4 +47,12 @@ class ApplicationController < ActionController::Base
   def oauth_scope
     ENV.fetch("OAUTH_SCOPE")
   end
+
+  def oauth_client_secret
+    ENV.fetch("OAUTH_CLIENT_SECRET")
+  end
+
+  def oauth_token_url
+    ENV.fetch("OAUTH_TOKEN_URL")
+  end
 end

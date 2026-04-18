@@ -20,6 +20,7 @@ export OAUTH_CLIENT_SECRET=#{提供されたclient_secret}
 export OAUTH_AUTHORIZE_URL=#{提供された認証URL}
 export OAUTH_REDIRECT_URI=http://localhost:3000/oauth/callback
 export OAUTH_SCOPE=#{提供されたスコープ}
+export OAUTH_TOKEN_URL=#{提供されたOAuthトークン取得URL}
 ```
 
 ```bash

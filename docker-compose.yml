@@ -16,6 +16,7 @@ services:
       OAUTH_AUTHORIZE_URL: ${OAUTH_AUTHORIZE_URL:-}
       OAUTH_REDIRECT_URI: ${OAUTH_REDIRECT_URI:-http://localhost:3000/oauth/callback}
       OAUTH_SCOPE: ${OAUTH_SCOPE:-}
+      OAUTH_TOKEN_URL: ${OAUTH_TOKEN_URL:-}
     ports:
       - "3000:3000"
     stdin_open: true

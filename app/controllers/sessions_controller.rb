@@ -16,6 +16,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session.delete(:user_id)
+    session.delete(:access_token)
     redirect_to new_session_path, notice: "ログアウトしました。"
   end
 end
