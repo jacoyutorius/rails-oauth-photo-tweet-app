@@ -57,5 +57,35 @@ RSpec.describe "Oauth", type: :request do
       expect(response).to redirect_to(photos_path)
       expect(session[:access_token]).to be_nil
     end
+
+    it "認証サーバーに指定されたform_dataが送信されること" do
+      http_response = instance_double(Net::HTTPOK, body: { access_token: "access-token" }.to_json)
+      request_double = instance_double(Net::HTTP::Post)
+      http_double = instance_double(Net::HTTP)
+
+      user = create(:user)
+      sign_in_as(user)
+
+      # Net::HTTP::Post に設定される form_data を検証する。
+      allow(Net::HTTP::Post).to receive(:new).and_return(request_double)
+      expect(request_double).to receive(:set_form_data).with(
+        code: "auth-code",
+        client_id: "client-id",
+        client_secret: "client-secret",
+        redirect_uri: "http://localhost:3000/oauth/callback",
+        grant_type: "authorization_code"
+      )
+
+      # Net::HTTP.start のブロックに渡される http オブジェクトを差し替え、
+      # 生成された request が request(request_double) に渡ることを確認する。
+      expect(http_double).to receive(:request).with(request_double).and_return(http_response)
+      allow(Net::HTTP).to receive(:start).and_yield(http_double)
+
+      get "/oauth/callback", params: { code: "auth-code" }
+
+      expect(response).to have_http_status(:found)
+      expect(response).to redirect_to(photos_path)
+      expect(session[:access_token]).to eq("access-token")
+    end
   end
 end
