@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   private
 
+  # メールアドレスを正規化するメソッド
   def normalize_email
     self.email = email.to_s.strip.downcase
   end

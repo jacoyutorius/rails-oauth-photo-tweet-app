@@ -3,7 +3,7 @@ require "securerandom"
 
 RSpec.describe User, type: :model do
   describe "validations" do
-    it "normalizes email before validation" do
+    it "バリデーション前にメールアドレスを正規化する" do
       email = "user-#{SecureRandom.hex(4)}@example.com"
 
       user = described_class.create!(
@@ -15,7 +15,7 @@ RSpec.describe User, type: :model do
       expect(user.email).to eq(email)
     end
 
-    it "does not allow duplicate emails case-insensitively" do
+    it "メールアドレスの大文字小文字を区別せず重複を許可しない" do
       email = "user-#{SecureRandom.hex(4)}@example.com"
 
       create(:user, email: email)
@@ -29,7 +29,7 @@ RSpec.describe User, type: :model do
       expect(user.errors[:email]).to include("はすでに使用されています")
     end
 
-    it "requires a password on create" do
+    it "作成時にパスワードを必須とする" do
       user = build(:user, password: nil, password_confirmation: nil)
 
       expect(user).not_to be_valid

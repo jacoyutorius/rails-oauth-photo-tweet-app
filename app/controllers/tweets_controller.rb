@@ -22,7 +22,7 @@ class TweetsController < ApplicationController
   end
 
   # ツイート投稿のAPIリクエストを送信する。
-  # レスポンス: Net::HTTPResponse オブジェクト
+  # 戻り値: Net::HTTPResponse オブジェクト
   def post_tweet
     uri = URI.parse(tweet_api_url)
     request = Net::HTTP::Post.new(uri)

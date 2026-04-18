@@ -21,6 +21,8 @@ class OauthController < ApplicationController
 
   private
 
+  # 認可コードをアクセストークンに交換する
+  # 戻り値: アクセストークン文字列、取得に失敗した場合は nil
   def fetch_access_token(code)
     uri = URI.parse(oauth_token_url)
     request = Net::HTTP::Post.new(uri)
@@ -36,9 +38,10 @@ class OauthController < ApplicationController
       http.request(request)
     end
 
-    # pp Rails.logger.info "----------response----------"
-    # pp Rails.logger.info response.body
-    # pp Rails.logger.info "----------------------------"
+    # デバッグ用
+    # Rails.logger.info "----------response----------"
+    # Rails.logger.info response.body
+    # Rails.logger.info "----------------------------"
 
     response_body = JSON.parse(response.body)
     response_body.fetch("access_token", nil)

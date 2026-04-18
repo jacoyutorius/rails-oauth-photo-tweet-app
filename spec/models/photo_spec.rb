@@ -1,22 +1,22 @@
 require "rails_helper"
 
 RSpec.describe Photo, type: :model do
-  it "is valid with a title and user" do
+  it "タイトルとユーザーがあれば有効である" do
     expect(build(:photo)).to be_valid
   end
 
-  it "is invalid without an image" do
+  it "画像がなければ無効である" do
     photo = build(:photo)
     photo.image.detach
 
     expect(photo).not_to be_valid
   end
 
-  it "is invalid without a title" do
+  it "タイトルがなければ無効である" do
     expect(build(:photo, title: "")).not_to be_valid
   end
 
-  it "is invalid when the title is longer than 30 characters" do
+  it "タイトルが31文字以上なら無効である" do
     expect(build(:photo, title: "a" * 31)).not_to be_valid
   end
 end

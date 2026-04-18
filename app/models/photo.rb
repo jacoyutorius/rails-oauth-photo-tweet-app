@@ -8,6 +8,7 @@ class Photo < ApplicationRecord
 
   private
 
+  # 画像が添付されているかを検証するカスタムバリデーション
   def image_must_be_attached
     errors.add(:image, :blank) unless image.attached?
   end
