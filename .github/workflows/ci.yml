@@ -89,6 +89,13 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
+          OAUTH_CLIENT_ID: test-client-id
+          OAUTH_CLIENT_SECRET: test-client-secret
+          OAUTH_AUTHORIZE_URL: http://example.com/oauth/authorize
+          OAUTH_REDIRECT_URI: http://localhost:3000/oauth/callback
+          OAUTH_SCOPE: write_tweet
+          OAUTH_TOKEN_URL: http://example.com/oauth/token
+          TWEET_API_URL: http://example.com/api/tweets
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
@@ -117,6 +124,13 @@ jobs:
       - name: Run RSpec
         env:
           RAILS_ENV: test
+          OAUTH_CLIENT_ID: test-client-id
+          OAUTH_CLIENT_SECRET: test-client-secret
+          OAUTH_AUTHORIZE_URL: http://example.com/oauth/authorize
+          OAUTH_REDIRECT_URI: http://localhost:3000/oauth/callback
+          OAUTH_SCOPE: write_tweet
+          OAUTH_TOKEN_URL: http://example.com/oauth/token
+          TWEET_API_URL: http://example.com/api/tweets
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare && bundle exec rspec
