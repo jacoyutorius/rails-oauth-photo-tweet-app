@@ -23,10 +23,7 @@ RSpec.describe "Sessions", type: :request do
     let!(:user) { create(:user) }
 
     it "正しい認証情報でログインできる" do
-      post session_path, params: {
-        email: user.email,
-        password: "password"
-      }
+      sign_in_as(user)
 
       expect(response).to have_http_status(:found)
       expect(response).to redirect_to(photos_path)
@@ -48,10 +45,7 @@ RSpec.describe "Sessions", type: :request do
   describe "DELETE /session" do
     it "ログアウトできる" do
       user = create(:user)
-      post session_path, params: {
-        email: user.email,
-        password: "password"
-      }
+      sign_in_as(user)
 
       delete session_path
 

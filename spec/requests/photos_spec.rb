@@ -37,10 +37,7 @@ RSpec.describe "Photos", type: :request do
         .with("OAUTH_SCOPE")
         .and_return("write_tweet")
 
-      post session_path, params: {
-        email: user.email,
-        password: "password"
-      }
+      sign_in_as(user)
 
       get photos_path
 
@@ -65,10 +62,7 @@ RSpec.describe "Photos", type: :request do
       allow(ENV).to receive(:fetch).and_call_original
       allow(ENV).to receive(:fetch).with("OAUTH_CLIENT_ID").and_return("")
 
-      post session_path, params: {
-        email: user.email,
-        password: "password"
-      }
+      sign_in_as(user)
 
       get photos_path
 
@@ -89,10 +83,7 @@ RSpec.describe "Photos", type: :request do
     it "ログイン中はアップロード画面を表示する" do
       user = create(:user)
 
-      post session_path, params: {
-        email: user.email,
-        password: "password"
-      }
+      sign_in_as(user)
 
       get new_photo_path
 
@@ -107,10 +98,7 @@ RSpec.describe "Photos", type: :request do
     it "有効な入力で写真を登録できる" do
       user = create(:user)
 
-      post session_path, params: {
-        email: user.email,
-        password: "password"
-      }
+      sign_in_as(user)
 
       expect do
         post photos_path, params: {
@@ -132,10 +120,7 @@ RSpec.describe "Photos", type: :request do
     it "無効な入力では写真を登録できない" do
       user = create(:user)
 
-      post session_path, params: {
-        email: user.email,
-        password: "password"
-      }
+      sign_in_as(user)
 
       expect do
         post photos_path, params: {
@@ -155,10 +140,7 @@ RSpec.describe "Photos", type: :request do
     it "タイトルが31文字以上だと登録できない" do
       user = create(:user)
 
-      post session_path, params: {
-        email: user.email,
-        password: "password"
-      }
+      sign_in_as(user)
 
       expect do
         post photos_path, params: {
