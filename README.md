@@ -1,3 +1,5 @@
+[![CI](https://github.com/jacoyutorius/rails-oauth-photo-tweet-app/actions/workflows/ci.yml/badge.svg)](https://github.com/jacoyutorius/rails-oauth-photo-tweet-app/actions/workflows/ci.yml)
+
 # photo-app
 
 Rails 8.1.3 / SQLite3 を使ったアプリケーションです。
