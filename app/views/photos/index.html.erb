@@ -14,7 +14,7 @@
           <div><%= image_tag photo.image, width: 200 %></div>
         <% end %>
         <% if access_token.present? %>
-          <div><%= button_to "ツイートする", "#", disabled: true %></div>
+          <div><%= button_to "ツイートする", photo_tweet_path(photo) %></div>
         <% end %>
       </li>
     <% end %>

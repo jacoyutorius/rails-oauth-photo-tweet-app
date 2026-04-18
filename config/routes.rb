@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :photos, only: [ :index, :new, :create ]
+  resources :photos, only: [ :index, :new, :create ] do
+    resource :tweet, only: [ :create ]
+  end
   get "oauth/callback", to: "oauth#callback"
   resource :session, only: [ :new, :create, :destroy ]
 

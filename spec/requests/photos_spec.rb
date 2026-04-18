@@ -59,7 +59,7 @@ RSpec.describe "Photos", type: :request do
 
     it "アクセストークンがある場合はツイートボタンを表示する" do
       user = create(:user)
-      create(:photo, user: user, title: "photo")
+      photo = create(:photo, user: user, title: "photo")
 
       allow_any_instance_of(ApplicationController).to receive(:access_token).and_return("access-token")
 
@@ -69,6 +69,7 @@ RSpec.describe "Photos", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("ツイートする")
+      expect(response.body).to include(%(action="#{photo_tweet_path(photo)}"))
     end
 
     it "アクセストークンがない場合はツイートボタンを表示しない" do
