@@ -93,7 +93,7 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
 
-  system-test:
+  rspec:
     runs-on: ubuntu-latest
 
     # services:
@@ -114,17 +114,9 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Run System Tests
+      - name: Run RSpec
         env:
           RAILS_ENV: test
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test:system
-
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+        run: bin/rails db:test:prepare && bundle exec rspec
