@@ -23,6 +23,20 @@ RSpec.describe "Photos", type: :request do
       newer_photo = create(:photo, user: user, title: "newer", created_at: 1.day.ago)
       create(:photo, user: other_user, title: "other")
 
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch)
+        .with("OAUTH_CLIENT_ID")
+        .and_return("test-client-id")
+      allow(ENV).to receive(:fetch)
+        .with("OAUTH_AUTHORIZE_URL")
+        .and_return("https://example.com/oauth/authorize")
+      allow(ENV).to receive(:fetch)
+        .with("OAUTH_REDIRECT_URI")
+        .and_return("http://localhost:3000/oauth/callback")
+      allow(ENV).to receive(:fetch)
+        .with("OAUTH_SCOPE")
+        .and_return("write_tweet")
+
       post session_path, params: {
         email: user.email,
         password: "password"
@@ -33,10 +47,33 @@ RSpec.describe "Photos", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("写真一覧")
       expect(response.body).to include("ログアウト")
+      expect(response.body).to include("MyTweetAppと連携")
+      expect(response.body).to include("https://example.com/oauth/authorize")
+      expect(response.body).to include("client_id=test-client-id")
+      expect(response.body).to include("redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Foauth%2Fcallback")
+      expect(response.body).to include("response_type=code")
+      expect(response.body).to include("scope=write_tweet")
       expect(response.body).to include(newer_photo.title)
       expect(response.body).to include(older_photo.title)
       expect(response.body).not_to include("other")
       expect(response.body.index(newer_photo.title)).to be < response.body.index(older_photo.title)
+    end
+
+    it "OAuth設定がない場合は認可リンクを表示しない" do
+      user = create(:user)
+
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with("OAUTH_CLIENT_ID").and_return("")
+
+      post session_path, params: {
+        email: user.email,
+        password: "password"
+      }
+
+      get photos_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include("MyTweetAppと連携")
     end
   end
 

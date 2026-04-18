@@ -1,5 +1,8 @@
 <h1>写真一覧</h1>
 <p><%= link_to "写真をアップロード", new_photo_path %></p>
+<% if oauth_authorize_url.present? %>
+  <p><%= link_to "MyTweetAppと連携", oauth_authorize_url %></p>
+<% end %>
 
 <% if @photos.any? %>
   <ul>
