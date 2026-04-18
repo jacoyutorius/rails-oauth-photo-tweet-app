@@ -3,20 +3,20 @@ require "rails_helper"
 RSpec.describe "Photos", type: :request do
   let(:image_file) do
     Rack::Test::UploadedFile.new(
-      Rails.root.join("spec/fixtures/files/test-image.svg"),
-      "image/svg+xml"
+      Rails.root.join("spec/fixtures/files/test-image.jpg"),
+      "image/jpeg"
     )
   end
 
   describe "GET /photos" do
-    it "未ログイン時はログイン画面にリダイレクトする" do
+    it "未ログイン時はログイン画面にリダイレクトすること" do
       get photos_path
 
       expect(response).to have_http_status(:found)
       expect(response).to redirect_to(new_session_path)
     end
 
-    it "ログイン中のユーザーの写真を新しい順で表示する" do
+    it "ログイン中のユーザーの写真を新しい順で表示すること" do
       user = create(:user)
       other_user = create(:user)
 
@@ -57,7 +57,7 @@ RSpec.describe "Photos", type: :request do
       expect(response.body.index(newer_photo.title)).to be < response.body.index(older_photo.title)
     end
 
-    it "アクセストークンがある場合はツイートボタンを表示する" do
+    it "アクセストークンがある場合はツイートボタンを表示すること" do
       user = create(:user)
       photo = create(:photo, user: user, title: "photo")
 
@@ -72,7 +72,7 @@ RSpec.describe "Photos", type: :request do
       expect(response.body).to include(%(action="#{photo_tweet_path(photo)}"))
     end
 
-    it "アクセストークンがない場合はツイートボタンを表示しない" do
+    it "アクセストークンがない場合はツイートボタンを表示しないこと" do
       user = create(:user)
       create(:photo, user: user, title: "photo")
 
@@ -84,7 +84,7 @@ RSpec.describe "Photos", type: :request do
       expect(response.body).not_to include("ツイートする")
     end
 
-    it "OAuth設定がない場合は認可リンクを表示しない" do
+    it "OAuth設定がない場合は認可リンクを表示しないこと" do
       user = create(:user)
 
       allow(ENV).to receive(:fetch).and_call_original
@@ -100,7 +100,7 @@ RSpec.describe "Photos", type: :request do
   end
 
   describe "GET /photos/new" do
-    it "未ログイン時はログイン画面を表示する" do
+    it "未ログイン時はログイン画面を表示すること" do
       get new_photo_path
       follow_redirect!
 
@@ -108,7 +108,7 @@ RSpec.describe "Photos", type: :request do
       expect(response.body).to include("ログイン")
     end
 
-    it "ログイン中はアップロード画面を表示する" do
+    it "ログイン中はアップロード画面を表示すること" do
       user = create(:user)
       sign_in_as(user)
 
@@ -122,7 +122,7 @@ RSpec.describe "Photos", type: :request do
   end
 
   describe "POST /photos" do
-    it "有効な入力で写真を登録できる" do
+    it "有効な入力で写真を登録できること" do
       user = create(:user)
       sign_in_as(user)
 
@@ -143,7 +143,7 @@ RSpec.describe "Photos", type: :request do
       expect(response.body).to include("sample photo")
     end
 
-    it "無効な入力では写真を登録できない" do
+    it "無効な入力では写真を登録できないこと" do
       user = create(:user)
       sign_in_as(user)
 
@@ -162,7 +162,7 @@ RSpec.describe "Photos", type: :request do
       expect(response.body).to include("画像ファイルを入力してください")
     end
 
-    it "タイトルが31文字以上だと登録できない" do
+    it "タイトルが31文字以上だと登録できないこと" do
       user = create(:user)
       sign_in_as(user)
 

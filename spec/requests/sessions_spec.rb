@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Sessions", type: :request do
   describe "GET /" do
-    it "未ログイン時はログイン画面にリダイレクトする" do
+    it "未ログイン時はログイン画面にリダイレクトすること" do
       get root_path
 
       expect(response).to have_http_status(:found)
@@ -11,7 +11,7 @@ RSpec.describe "Sessions", type: :request do
   end
 
   describe "GET /session/new" do
-    it "ログイン画面を表示する" do
+    it "ログイン画面を表示すること" do
       get new_session_path
 
       expect(response).to have_http_status(:ok)
@@ -22,7 +22,7 @@ RSpec.describe "Sessions", type: :request do
   describe "POST /session" do
     let!(:user) { create(:user) }
 
-    it "正しい認証情報でログインできる" do
+    it "正しい認証情報でログインできること" do
       sign_in_as(user)
 
       expect(response).to have_http_status(:found)
@@ -30,7 +30,7 @@ RSpec.describe "Sessions", type: :request do
       expect(session[:user_id]).to eq(user.id)
     end
 
-    it "誤った認証情報ではログインできない" do
+    it "誤った認証情報ではログインできないこと" do
       post session_path, params: {
         email: user.email,
         password: "wrong-password"
@@ -43,7 +43,7 @@ RSpec.describe "Sessions", type: :request do
   end
 
   describe "DELETE /session" do
-    it "ログアウトできる" do
+    it "ログアウトできること" do
       user = create(:user)
       sign_in_as(user)
 

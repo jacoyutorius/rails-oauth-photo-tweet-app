@@ -45,7 +45,8 @@ class OauthController < ApplicationController
 
     response_body = JSON.parse(response.body)
     response_body.fetch("access_token", nil)
-  rescue JSON::ParserError
+  rescue StandardError => e
+    Rails.logger.error "アクセストークンの取得に失敗: #{e.message}"
     nil
   end
 end

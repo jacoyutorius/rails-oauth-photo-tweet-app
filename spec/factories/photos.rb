@@ -7,9 +7,9 @@ FactoryBot.define do
       next if photo.image.attached?
 
       photo.image.attach(
-        io: Rails.root.join("spec/fixtures/files/test-image.svg").open,
-        filename: "test-image.svg",
-        content_type: "image/svg+xml"
+        io: Rails.root.join("spec/fixtures/files/test-image.jpg").open,
+        filename: "test-image.jpg",
+        content_type: "image/jpeg"
       )
     end
   end

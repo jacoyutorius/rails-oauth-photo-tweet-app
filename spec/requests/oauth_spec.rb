@@ -10,14 +10,14 @@ RSpec.describe "Oauth", type: :request do
       allow(ENV).to receive(:fetch).with("OAUTH_TOKEN_URL").and_return("http://example.com/oauth/token")
     end
 
-    it "未ログイン時はログイン画面にリダイレクトする" do
+    it "未ログイン時はログイン画面にリダイレクトすること" do
       get "/oauth/callback", params: { code: "auth-code" }
 
       expect(response).to have_http_status(:found)
       expect(response).to redirect_to(new_session_path)
     end
 
-    it "認可コードからアクセストークンを取得してsessionに保存する" do
+    it "認可コードから取得したアクセストークンがsessionに保存されること" do
       http_response = instance_double(Net::HTTPOK, body: { access_token: "access-token" }.to_json)
       allow(Net::HTTP).to receive(:start).and_return(http_response)
 
@@ -31,7 +31,7 @@ RSpec.describe "Oauth", type: :request do
       expect(session[:access_token]).to eq("access-token")
     end
 
-    it "アクセストークン取得に失敗した場合は一覧へ戻る" do
+    it "アクセストークン取得に失敗した場合は画像一覧へ戻ること" do
       http_response = instance_double(Net::HTTPOK, body: { error: "invalid_grant", error_description: "error message" }.to_json)
       allow(Net::HTTP).to receive(:start).and_return(http_response)
 
@@ -45,9 +45,8 @@ RSpec.describe "Oauth", type: :request do
       expect(session[:access_token]).to be_nil
     end
 
-    it "レスポンスがJSONでない場合は一覧へ戻る" do
-      http_response = instance_double(Net::HTTPOK, body: "invalid response")
-      allow(Net::HTTP).to receive(:start).and_return(http_response)
+    it "HTTPリクエストに失敗した場合は画像一覧へ戻ること" do
+      allow(Net::HTTP).to receive(:start).and_raise(StandardError.new("network error"))
 
       user = create(:user)
       sign_in_as(user)

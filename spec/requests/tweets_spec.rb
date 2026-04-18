@@ -7,7 +7,7 @@ RSpec.describe "Tweets", type: :request do
       allow(ENV).to receive(:fetch).with("TWEET_API_URL").and_return("http://example.com/api/tweets")
     end
 
-    it "未ログイン時はログイン画面にリダイレクトする" do
+    it "未ログイン時はログイン画面にリダイレクトすること" do
       photo = create(:photo)
 
       post photo_tweet_path(photo)
@@ -16,7 +16,7 @@ RSpec.describe "Tweets", type: :request do
       expect(response).to redirect_to(new_session_path)
     end
 
-    it "201 のとき投稿成功として一覧へ戻る" do
+    it "ステータスコードが201 のとき投稿成功として画像一覧へ戻ること" do
       user = create(:user)
       photo = create(:photo, user: user, title: "tweet title")
       http_response = instance_double(Net::HTTPCreated, code: "201")
@@ -32,7 +32,7 @@ RSpec.describe "Tweets", type: :request do
       expect(response).to redirect_to(photos_path)
     end
 
-    it "201 以外のとき投稿失敗として一覧へ戻る" do
+    it "ステータスコードが201 以外のとき投稿失敗として画像一覧へ戻ること" do
       user = create(:user)
       photo = create(:photo, user: user)
       http_response = instance_double(Net::HTTPBadRequest, code: "400")
